@@ -25,5 +25,7 @@ public class Example1 {
         Integer num = context.getBean(Integer.class);
         System.out.println("Integer value from Spring Context is: " + num);
 
+
+
     }
 }
