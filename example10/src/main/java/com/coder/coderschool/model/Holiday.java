@@ -1,14 +1,16 @@
 package com.coder.coderschool.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class Holiday {
+public class Holiday extends BaseEntity{
 
-    private final String day;
-    private final  String reason;
+    private String day;
+    private String reason;
 
-    private final Type type;
+    private Type type;
 
     public enum Type {
         FESTIVAL, FEDERAL
