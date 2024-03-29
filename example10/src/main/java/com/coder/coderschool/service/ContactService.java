@@ -5,6 +5,10 @@ import com.coder.coderschool.model.Contact;
 import com.coder.coderschool.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
@@ -34,20 +38,20 @@ public class ContactService {
         return isSaved;
     }
 
-    public List<Contact> findMsgsWithOpenStatus() {
-        List<Contact> contactMsgs = contactRepository.findByStatus(CoderSchoolConstants.OPEN);
-        return contactMsgs;
+    public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
+                sortDir.equals("asc") ? Sort.by(sortField).ascending()
+                        : Sort.by(sortField).descending());
+        Page<Contact> msgPage = contactRepository.findByStatus(
+                CoderSchoolConstants.OPEN, pageable);
+        return msgPage;
     }
 
     public boolean updateMsgStatus(int contactId) {
         boolean isUpdated = false;
-        Optional<Contact> contact = contactRepository.findById(contactId);
-        contact.ifPresent(contact1 -> {
-                    contact1.setStatus(CoderSchoolConstants.CLOSE);
-                }
-        );
-        Contact updateContact = contactRepository.save(contact.get());
-        if (updateContact.getUpdatedBy() != null){
+        int rows = contactRepository.updateMsgStatus(CoderSchoolConstants.CLOSE, contactId);
+        if (rows > 0 ){
             isUpdated = true;
         }
         return isUpdated;
