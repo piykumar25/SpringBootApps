@@ -1,12 +1,16 @@
 package com.coder.coderschool.controller;
 
 import com.coder.coderschool.model.Contact;
+import com.coder.coderschool.model.Response;
 import com.coder.coderschool.service.ContactService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -81,6 +85,21 @@ public class ContactController {
         contactService.updateMsgStatus(id);
         return "redirect:/displayMessages/page/1?sortField=name&sortDir=desc";
 
+    }
+
+    @RequestMapping(value = "/api/contact/getMessageByStatus", method = GET)
+    @ResponseBody
+    public List<Contact> getMessageByStatus(@RequestParam String status) {
+        return contactService.getAllMessages(status);
+    }
+
+    @RequestMapping(value = "/api/contact/saveMsg", method = RequestMethod.POST)
+    @ResponseBody
+    public Response saveMsg(@RequestBody Contact contact) {
+        if(contactService.saveMessageDetails(contact)) {
+            return new Response(HttpStatus.CREATED.toString(), HttpStatus.OK.toString());
+        }
+        return new Response(HttpStatus.BAD_REQUEST.toString(), HttpStatus.INTERNAL_SERVER_ERROR.toString());
     }
 
 

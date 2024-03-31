@@ -57,4 +57,9 @@ public class ContactService {
         return isUpdated;
     }
 
+    public List<Contact> getAllMessages(String status) {
+        return contactRepository.findByStatus(status);
+
+    }
+
 }
