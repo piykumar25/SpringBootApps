@@ -22,7 +22,9 @@ public class ProjectSecurityConfig {
         MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 
         http.csrf((csrf) -> csrf.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/saveMsg"),
-                                mvcMatcherBuilder.pattern("/api/contact/**"))
+                        mvcMatcherBuilder.pattern("/public/**"),
+                                mvcMatcherBuilder.pattern("/data-api/**"),
+                                mvcMatcherBuilder.pattern("/api/**"))
                         .ignoringRequestMatchers(mvcMatcherBuilder.pattern("/public/**")))
                 .authorizeHttpRequests((requests) -> requests.requestMatchers(mvcMatcherBuilder.pattern("/dashboard")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("/displayMessages/**")).hasRole("ADMIN")
@@ -32,10 +34,12 @@ public class ProjectSecurityConfig {
                         .requestMatchers(mvcMatcherBuilder.pattern("/updateProfile")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("/displayProfile")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("")).permitAll()
-                        .requestMatchers(mvcMatcherBuilder.pattern("/api/contact/**")).permitAll()
+                        .requestMatchers(mvcMatcherBuilder.pattern("/api/**")).authenticated()
+                        .requestMatchers(mvcMatcherBuilder.pattern("/data-api/**")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("/")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/home")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/holidays/**")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern("/data-api/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/contact")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/saveMsg")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/courses")).permitAll()
