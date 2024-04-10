@@ -24,13 +24,15 @@ public class ProjectSecurityConfig {
         http.csrf((csrf) -> csrf.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/saveMsg"),
                         mvcMatcherBuilder.pattern("/public/**"),
                                 mvcMatcherBuilder.pattern("/data-api/**"),
-                                mvcMatcherBuilder.pattern("/api/**"))
+                                mvcMatcherBuilder.pattern("/api/**"),
+                                mvcMatcherBuilder.pattern("/coderschool/actuator/**"))
                         .ignoringRequestMatchers(mvcMatcherBuilder.pattern("/public/**")))
                 .authorizeHttpRequests((requests) -> requests.requestMatchers(mvcMatcherBuilder.pattern("/dashboard")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("/displayMessages/**")).hasRole("ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/closeMsg/**")).hasRole("ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/admin/**")).hasRole("ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/student/**")).hasRole("STUDENT")
+                        .requestMatchers(mvcMatcherBuilder.pattern("/coderschool/actuator/**")).hasRole("ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/updateProfile")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("/displayProfile")).authenticated()
                         .requestMatchers(mvcMatcherBuilder.pattern("")).permitAll()
