@@ -19,8 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Profile("prod")
-public class CoderSchoolUserNamePwdAuthenticationProvider implements AuthenticationProvider {
+@Profile("!prod")
+public class CoderSchoolNonProdUserNamePwdAuthenticationProvider implements AuthenticationProvider {
+
 
     @Autowired
     private PersonRepository personRepository;
@@ -32,8 +33,7 @@ public class CoderSchoolUserNamePwdAuthenticationProvider implements Authenticat
         String email = authentication.getName();
         String pwd = authentication.getCredentials().toString();
         Person person = personRepository.readByEmail(email);
-        if(person != null && person.getPersonId() > 0
-            && passwordEncoder.matches(pwd, person.getPwd())) {
+        if(person != null && person.getPersonId() > 0) {
             return new UsernamePasswordAuthenticationToken(email, null, getGrantedAuthorities(person.getRoles()));
         } else {
             throw new BadCredentialsException("Invalid Credentials");
@@ -51,3 +51,4 @@ public class CoderSchoolUserNamePwdAuthenticationProvider implements Authenticat
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
+
